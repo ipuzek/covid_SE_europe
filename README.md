@@ -10,8 +10,8 @@ Broj slučajeva - usporedba prosječnog kretanja od prvog zabilježenog slučaja
 
 ![Dynamics: average vd last 10 days](figs_out/dynamics.svg)
 
-Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na:
-https://youtu.be/54XLXg4fYsc
+Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na:  
+https://youtu.be/54XLXg4fYsc  
 https://github.com/yonicd/covid-19-data
 
 ![Are we beating Covid 19?](figs_out/anim.gif)
