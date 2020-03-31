@@ -16,7 +16,3 @@ https://github.com/yonicd/covid-19-data
 
 ![Are we beating Covid 19?](figs_out/anim.gif)
 
-
-
-
-
