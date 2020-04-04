@@ -5,7 +5,8 @@ library(lubridate)
 library(purrr)
 library(broom)
 library(tidyr)
-library(ggplot2); library(ggrepel)
+library(zoo)
+library(ggplot2); library(ggrepel); library(gganimate)
 library(tibble)
 library(dplyr)
 
@@ -66,7 +67,7 @@ dbl_df <- df %>%
   arrange(dateRep, .by_group = TRUE) %>%
   mutate(cum_cases = cumsum(cases),
          weeks = strftime(dateRep, format = "%V")) %>% 
-  filter(geoId %in% zemlje, dateRep > "2020-02-29 UTC") %>%
+  filter(geoId %in% zemlje, cum_cases > 0) %>%
   add_numbers() %>% 
   split(.$geoId) %>% 
   map(~ lm(log2(cum_cases) ~ nos, data = .x)) %>%
@@ -87,7 +88,7 @@ g2 <- df %>%
   arrange(dateRep, .by_group = TRUE) %>%
   mutate(cum_cases = cumsum(cases),
          weeks = strftime(dateRep, format = "%V")) %>% 
-  filter(geoId %in% zemlje, dateRep > "2020-02-29 UTC") %>% 
+  filter(geoId %in% zemlje, cum_cases > 0) %>%
   ggplot(aes(x = dateRep, y = cum_cases)) +
   geom_point(alpha = .3) +
     scale_y_continuous(trans = "log2") +
@@ -112,9 +113,9 @@ ggsave("figs_out/dynamics.svg", plot = g2)
 
 df.cum_cases_days <- df %>%
   arrange(geoId, dateRep) %>% 
-  filter(geoId %in% zemlje, cases > 0) %>%
   group_by(geoId) %>% 
-  mutate(cum_cases = cumsum(cases)) %>% 
+  mutate(cum_cases = cumsum(cases)) %>%
+  filter(geoId %in% zemlje, cum_cases > 0) %>%
   ungroup() %>% 
   split(.$geoId) %>% 
   lapply(function(x) add_column(x, days = 1:nrow(x)))
@@ -159,7 +160,63 @@ ggsave("figs_out/doubling.svg", plot = g3)
 # graf 4 ------------------------------------------------------------------
 # Broj slučajeva vs kretanje (Vlejd spika)
 
+   # in this example, precipitation
+ylim.sec <- c(-4, 18)    # in this example, temperature
+
+
+df_lag <- df %>%
+  arrange(geoId, dateRep) %>% 
+  group_by(geoId) %>% 
+  mutate(
+    cum_cases = cumsum(cases),
+    lag_cases = cases/lag(cases, 1),
+    lag_cases = case_when(is.infinite(lag_cases) ~ NA_real_,
+                          TRUE ~ lag_cases),
+    lag_cases_smooth3 = zoo::rollapply(lag_cases, 3, mean, align = 'right', fill = NA),
+                          ) %>%
+  filter(geoId %in% zemlje, cum_cases > 0) %>%
+  filter(geoId != "AT") %>%
+  select(dateRep, geoId, cases, cum_cases, lag_cases, lag_cases_smooth3)
+
+ylim.prim <- c(0, max(df_lag$cum_cases))
+ylim.sec <- c(0, max(df_lag$lag_cases_smooth3, na.rm = TRUE))
+
+b <- diff(ylim.prim)/diff(ylim.sec)
+a <- b*(ylim.prim[1] - ylim.sec[1])
+
+g4 <- ggplot(df_lag, aes(dateRep, cum_cases)) +
+  geom_col(colour = "darkgrey", fill = NA) +
+  geom_hline(aes(yintercept = a + b), linetype = 2, colour = "grey") +
+  geom_line(aes(y = a + lag_cases_smooth3*b), color = "red") +
+  scale_y_continuous("cum_cases", sec.axis = sec_axis(~ (. - a)/b, name = "porast")) +
+  facet_grid(cols = vars(geoId))
+  # scale_x_continuous("Month", breaks = 1:12)
+  
+ggsave("figs_out/rate.svg", plot = g4)
 
 # graf 5 ------------------------------------------------------------------
 # Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na https://youtu.be/54XLXg4fYsc
 
+
+vizz_anim <- df %>%
+  add_numbers() %>%
+  group_by(geoId) %>%
+  arrange(dateRep, .by_group = TRUE) %>%
+  mutate(cum_cases = cumsum(cases)) %>%
+  filter(cum_cases > 0) %>%
+  mutate(
+    ma3 = rollapply(cases, 3, mean, align = 'right', fill = NA),
+    ma5 = rollapply(cases, 5, mean, align = 'right', fill = NA),
+    ma7 = rollapply(cases, 7, mean, align = 'right', fill = NA)
+  ) %>%
+  ungroup() %>% 
+  filter(geoId %in% zemlje) %>%
+  filter(dateRep > "2020-02-26") %>% 
+  ggplot(aes(x = cum_cases, y = ma5, colour = geoId)) +
+  geom_line(aes(y = ma5, colour = geoId)) +
+  # geom_line(aes(y = ma7, colour = geoId), size = .1, linetype = 2) +
+  scale_x_continuous(limits = c(10, NA), trans = "log10") +
+  scale_y_continuous(limits = c(10, NA), trans = "log10") +
+  transition_reveal(along = dateRep)
+
+anim_save("figs_out/beating.gif", vizz_anim, fps = 20, duration = 30)

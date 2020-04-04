@@ -4,7 +4,7 @@ library(gganimate)
 # zemlje <- c("HR", "SI")
 # zemlje <- c("IT", "ES", "KR", "IR")
 # zemlje <- c("HR", "SI", "DK", "AT", "DE")
-zemlje <- c("HR", "SI", "AT", "SK")
+# zemlje <- c("HR", "SI", "AT", "SK")
 
 add_numbers <- function(df){
   df.split <- split(df, df$geoId)
@@ -34,5 +34,6 @@ vizz_anim <- df %>%
   scale_y_continuous(limits = c(10, NA), trans = "log10") +
   transition_reveal(along = dateRep)
 
-animate(vizz_anim, fps = 20, duration = 30)
-animate(vizz_anim, fps = 20, duration = 30, renderer = ffmpeg_renderer())
+animate(vizz_anim)
+
+# animate(vizz_anim, fps = 20, duration = 30, renderer = ffmpeg_renderer())
