@@ -2,7 +2,7 @@
 
 library(tibble)
 library(broom)
-library(magrittr)
+# library(magrittr)
 
 zemlje <- c("HR", "SI", "AT", "SK")
 # zemlje <- c("HR", "SI", "DK", "AT", "DE")
@@ -25,7 +25,7 @@ model_n_extract <- function(df, remove_intercept) {
     tidy %>%
     filter(term == "days") %>% 
     pull(estimate) %>%
-    raise_to_power(-1) %>%
+    magrittr::raise_to_power(-1) %>%
     round(2)
 }
 

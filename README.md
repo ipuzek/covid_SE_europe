@@ -6,9 +6,18 @@ Broj smrti
 
 ![No of deaths](figs_out/deaths.svg)
 
-Broj slučajeva - usporedba prosječnog kretanja od prvog zabilježenog slučaja i kretanja u zadnjih 10 dana
+Broj slučajeva - usporedba prosječnog kretanja od prvog zabilježenog slučaja i kretanja u zadnjih 2 tjedna
 
-![Dynamics: average vd last 10 days](figs_out/dynamics.svg)
+![Dynamics: average vs last 10 days](figs_out/dynamics.svg)
+
+Broj slučajeva - Prosječno kretanje od prvog zabilježenog slučaja, iz ishodišta
+
+![Dynamics: average, no intercept](figs_out/doubling.svg)
+
+Broj slučajeva vs kretanje (Vlejd spika)
+
+
+
 
 Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na:  
 https://youtu.be/54XLXg4fYsc  

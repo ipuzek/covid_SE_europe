@@ -2,7 +2,6 @@
 
 library(tibble)
 library(broom)
-library(magrittr)
 
 zemlje <- c("HR", "SI", "AT", "SK")
 # zemlje <- c("IT", "ES")
@@ -22,10 +21,11 @@ model_n_extract <- function(df, remove_intercept) {
   if (remove_intercept) m <- lm(log2(cum_cases) ~ days - 1, data = df)
   m %>%   
     tidy %>%
-    filter(term == "days") %>% 
-    pull(estimate) %>%
-    raise_to_power(-1) %>%
-    round(2)
+    filter(term == "days") %>%
+    mutate(
+      est_double = round(1/estimate, 2),
+      ) %>% 
+    pull(est_double)
 }
 
 doubling_average <- df.cum_cases_days %>%
