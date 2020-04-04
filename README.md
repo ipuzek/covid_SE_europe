@@ -14,7 +14,7 @@ Broj slučajeva - Prosječno kretanje od prvog zabilježenog slučaja, iz ishodi
 
 ![Dynamics: average, no intercept](figs_out/doubling.svg)
 
-Broj slučajeva vs kretanje (Vlejd spika)
+Broj slučajeva vs kretanje
 
 ![Cumulative vs rate](figs_out/rate.svg)
 
