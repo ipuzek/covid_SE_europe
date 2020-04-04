@@ -1,4 +1,5 @@
 rec_bin/
+*.png
 
 # History files
 .Rhistory
