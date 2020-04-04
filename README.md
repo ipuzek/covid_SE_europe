@@ -16,7 +16,7 @@ Broj slučajeva - Prosječno kretanje od prvog zabilježenog slučaja, iz ishodi
 
 Broj slučajeva vs kretanje (Vlejd spika)
 
-
+![Cumulative vs rate](figs_out/rate.svg)
 
 
 Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na:  
