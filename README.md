@@ -23,5 +23,4 @@ Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na:
 https://youtu.be/54XLXg4fYsc  
 https://github.com/yonicd/covid-19-data
 
-![Are we beating Covid 19?](figs_out/anim.gif)
-
+![Are we beating Covid 19?](figs_out/beating.gif)
