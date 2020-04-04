@@ -7,8 +7,8 @@ library(broom)
 library(tidyr)
 library(zoo)
 library(ggplot2); library(ggrepel); library(gganimate)
-library(tibble)
-library(dplyr)
+library(gifski)
+library(dplyr); library(tibble)
 
 
 add_numbers <- function(df){
