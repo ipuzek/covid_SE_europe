@@ -45,7 +45,10 @@ g1 <- df %>%
   labs(title = "smrti",
        subtitle = format(Sys.time(), "%Y-%m-%d"), x = "", y = "")
 
-ggsave("figs_out/deaths.svg", plot = g1)
+# ggsave("figs_out/deaths.svg", plot = g1, device = "cairo_pdf")
+Cairo::Cairo(width = 8, height = 6, file="figs_out/deaths.svg", type="svg", units = "in")
+g1
+dev.off()
 
 # graf 2 ------------------------------------------------------------------
 # kretanje novopotvrđenih - ukupno vs zadnja 2 tjedna
@@ -105,7 +108,10 @@ g2 <- df %>%
        subtitle = format(Sys.time(), "%Y-%m-%d"), x = "", y = "") +
   guides(colour=FALSE)
 
-ggsave("figs_out/dynamics.svg", plot = g2)
+# ggsave("figs_out/dynamics.svg", plot = g2)
+Cairo::Cairo(width = 8, height = 6, file="figs_out/dynamics.svg", type="svg", units = "in")
+g2
+dev.off()
 
 
 # graf 3 ------------------------------------------------------------------
@@ -155,7 +161,11 @@ g3 <- df.cum_cases_days %>%
   labs(title = "Duplanje",
        subtitle = "- prosječni broj dana za duplanje slučajeva od prvog slučaja")
 
-ggsave("figs_out/doubling.svg", plot = g3)
+# ggsave("figs_out/doubling.svg", plot = g3)
+Cairo::Cairo(width = 8, height = 6, file="figs_out/doubling.svg", type="svg", units = "in")
+g3
+dev.off()
+
 
 # graf 4 ------------------------------------------------------------------
 # Broj slučajeva vs kretanje (Vlejd spika)
@@ -192,7 +202,11 @@ g4 <- ggplot(df_lag, aes(dateRep, cum_cases)) +
   facet_grid(cols = vars(geoId))
   # scale_x_continuous("Month", breaks = 1:12)
   
-ggsave("figs_out/rate.svg", plot = g4)
+# ggsave("figs_out/rate.svg", plot = g4)
+Cairo::Cairo(width = 8, height = 6, file="figs_out/rate.svg", type="svg", units = "in")
+g4
+dev.off()
+
 
 # graf 5 ------------------------------------------------------------------
 # Broj kumulativnih slučajeva vs broj novih slučajeva - animacija po uzoru na https://youtu.be/54XLXg4fYsc
@@ -219,4 +233,4 @@ vizz_anim <- df %>%
   scale_y_continuous(limits = c(10, NA), trans = "log10") +
   transition_reveal(along = dateRep)
 
-anim_save("figs_out/beating.gif", vizz_anim, fps = 20, duration = 30)
+anim_save("figs_out/beating.gif", vizz_anim, fps = 20, duration = 30, end_pause = 200)
