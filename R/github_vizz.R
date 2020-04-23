@@ -29,7 +29,7 @@ df <- readxl::read_xlsx(tf)
 # graf 1 ------------------------------------------------------------------
 # broj smrti
 
-zemlje <- c("HR", "SI", "AT", "BA")
+zemlje <- c("HR", "SI", "AT", "SE")
 
 g1 <- df %>%
   group_by(geoId) %>% 
